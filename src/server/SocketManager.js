@@ -2,21 +2,27 @@ const io = require('./index.js').io;
 const { VERIFY_USER, USER_CONNECTED, LOGOUT } = require('../Events');
 const { createUser, createMessage, createChat } = require('../Factories');
 
-const connectedUser = {  }
+let connectedUsers = {  }
 
 module.exports = function(socket) {
     console.log('Socket Id' + socket.id);
 
     // Verify Username
     socket.on(VERIFY_USER, (nickname, callback) => {
-        if(isUser(connectedUser, nickname)) {
+        if(isUser(connectedUsers, nickname)) {
             callback({ isUser: true, user: null})
         } else {
             callback({ isUser: false, user: createUser({name: nickname})})
         }
     })
     // User Connects with username
+    socket.on(USER_CONNECTED, (user) => {
+        connectedUsers = addUser(connectedUsers, user)
+        socket.user = user;
 
+        io.emit(USER_CONNECTED, connectedUsers)
+        console.log(connectedUsers);
+    })
     // User disconnects
 
     // User logouts
