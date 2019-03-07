@@ -24,7 +24,7 @@ const createUser = ({name = ""} = {}) => ({
 *       message {string}
 *       sender {string}
 */
-const createChat = ({message = "", sender = ""} = { }) => ({
+const createMessage = ({message = "", sender = ""} = { }) => ({
     id: uudiv4(),
     time: getTime(new Date(Date.now())),
     message,
